@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Links in PDF</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --text: #121826;
+  --muted: #475569;
+  --card: rgba(255,255,255,0.45);
+  --stroke: rgba(0,0,0,0.12);
+  --accent: #3b82f6;
+  --accent-2: #22d3ee;
+  --shadow: rgba(2, 6, 23, 0.12);
+}
+
+/* Global */
+body {
+  background: linear-gradient(135deg, #007bff, #8a2be2); /* Changed background to a gradient */
+  color: #ffffff; /* Changed font color to white */
+  font-family: 'Comic Sans MS', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+  overflow-y: auto;
+  margin: 0;
+}
+
+/* Subtle grid background */
+body::before { content: ""; position: fixed; inset: 0; display: none; }
+
+h1 {
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  margin: 28px 0 10px;
+  color: #ffffff; /* Changed font color to white */
+  -webkit-background-clip: initial;
+  background-clip: initial;
+}
+
+hr { width: min(920px, 92%); margin: 8px auto 14px auto; border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(2,6,23,0.12), transparent); }
+
+p { text-align: center; max-width: 900px; margin: 0 auto 10px auto; line-height: 1.7; color: #ffffff; /* Changed font color to white */ }
+
+.ai-symbol {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(100px 100px at 30% 30%, #7ec8ff 0%, #457bff 35%, #1a3b8d 100%);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  display: flex; /* Changed from none to flex to make it visible */
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  position: absolute; /* For animation */
+  /* Define CSS variables for base transform values */
+  --base-translate-y: 0px;
+  --base-scale: 1;
+  /* Apply the base transform using variables */
+  transform: translateY(var(--base-translate-y)) scale(var(--base-scale));
+  transition: top 0.5s ease, transform 0.2s ease; /* Keep existing transition */
+}
+.ai-symbol:hover {
+  /* Apply additional transform on hover, combining with the base transform */
+  /* This ensures the hover effect is consistent regardless of the base transform state */
+  transform: translateY(calc(var(--base-translate-y) - 4px)) scale(calc(var(--base-scale) * 1.02));
+}
+/* Removed the generic .ai-symbol::before and added specific ones below */
+/* .ai-symbol::before {
+  content: "AI";
+  font-size: 2.2em;
+  font-weight: 800;
+  color: #eaf2ff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+} */
+
+#ai-symbol-1::before {
+  content: "links"; /* Changed content to "links" */
+  font-size: 1.8em; /* Adjusted font size for "links" */
+  font-weight: 800;
+  color: #eaf2ff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+#ai-symbol-2::before {
+  content: "pdf"; /* Changed content to "pdf" */
+  font-size: 2.2em; /* Adjusted font size for "pdf" */
+  font-weight: 800;
+  color: #eaf2ff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+#search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+#search-bar {
+  padding: 12px 14px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.35));
+  color: var(--text);
+  border-radius: 14px;
+  outline: none;
+  width: 360px;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.10), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(2,6,23,0.05);
+  backdrop-filter: saturate(140%) blur(8px);
+}
+#search-bar::placeholder { color: #6b7280; opacity: .9; }
+/* Updated button styles to remove #change-bg */
+#search-button, #antigravity-button, #change-heading {
+  padding: 12px 14px;
+  background: transparent;
+  color: #111;
+  border: 1px solid #c7c7c7;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: none;
+}
+#search-button:hover, #antigravity-button:hover, #change-heading:hover {
+  transform: none;
+  box-shadow: none;
+}
+#search-button:active, #antigravity-button:active, #change-heading:active {
+  transform: none;
+  box-shadow: none;
+}
+/* Made buttons visible */
+#antigravity-button, #change-heading { display: inline-block; } 
+
+#pdf-container { max-width: 1000px; margin: 26px auto 44px auto; padding: 0 16px; display: flex; justify-content: center; }
+
+#search-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px; }
+#search-bar {
+  padding: 12px 14px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.35));
+  color: var(--text);
+  border-radius: 14px;
+  outline: none;
+  width: 360px;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.10), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(2,6,23,0.05);
+  backdrop-filter: saturate(140%) blur(8px);
+}
+#search-bar::placeholder { color: #6b7280; opacity: .9; }
+
+#search-button {
+  padding: 12px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25));
+  color: #0b1220;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(2,6,23,0.12), inset 0 1px 0 rgba(255,255,255,0.85);
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  backdrop-filter: saturate(140%) blur(8px);
+}
+#search-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(2,6,23,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+#search-bar:focus, #search-button:focus { outline: 3px solid rgba(59,130,246,0.25); outline-offset: 2px; }
+
+/* PDF viewer as a light card */
+#pdf-viewer { width: clamp(320px, 80vw, 900px); height: clamp(360px, 65vh, 780px); border: 1px solid rgba(2,6,23,0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(2,6,23,0.12), inset 0 1px 0 rgba(255,255,255,0.4); background: #ffffff; }
+
+/* Scrollbar styling - light */
+* { scrollbar-width: thin; scrollbar-color: #b9c0cf transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background-color: #b9c0cf; border-radius: 10px; border: 2px solid transparent; }
+*::-webkit-scrollbar-thumb:hover { background-color: #a8afc0; }
+
+/* Ensure AI symbols remain visible */
+.ai-symbol { display: flex; } /* Changed from none to flex to make it visible */
+
+/* Responsive layout improvements */
+@media (max-width: 640px) {
+  .ai-symbol { width: 96px; height: 96px; border-radius: 20px; }
+  h1 { font-size: 1.6rem; }
+  p { padding: 0 14px; }
+  #search-bar { width: 180px; }
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+</head>
+<body>
+
+<h1>Links in PDF</h1>
+<hr>
+<br>
+<p>Links in a PDF document are a navigational feature that directs users to a specific location or resource. Similar to hyperlinks on a webpage, they can be created from text, images, or other elements within the PDF.</p>
+
+<p>There are two primary types of links in a PDF:</p>
+<p>-> Internal Links: These links navigate within the same PDF document. They are useful for creating an interactive table of contents, directing readers to specific sections, or moving between pages.</p>
+<p>-> External Links: These links lead outside the current PDF. They can be used to open an external file, a web page, or even a specific email address.</p>
+
+<br>
+<div class="ai-symbol" id="ai-symbol-1"></div>
+<div class="ai-symbol" id="ai-symbol-2"></div>
+<div id="search-container">
+  <input type="text" id="search-bar" placeholder="Search...">
+  <button id="search-button">Search</button>
+  <!-- Removed "Change Background" button -->
+  <button id="antigravity-button">Anti-gravity</button>
+  <button id="change-heading">Change Heading</button>
+</div>
+<div id="pdf-container">
+  <iframe id="pdf-viewer" src="https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf"></iframe> </div>
+<script>
+document.getElementById('search-button').addEventListener('click', function() {
+  const searchTerm = document.getElementById('search-bar').value;
+  window.open('https://www.google.com/search?q=' + encodeURIComponent(searchTerm), '_blank');
+});
+
+// Removed the event listener for 'change-bg' button
+
+// Set initial positions for AI bubbles on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const aiSymbol1 = document.getElementById('ai-symbol-1');
+  const aiSymbol2 = document.getElementById('ai-symbol-2');
+
+  // Initial position: bottom, 1 unit to left/right
+  // AI bubble height is 120px. To be 20px from bottom, top should be calc(100vh - 120px - 20px) = calc(100vh - 140px)
+  aiSymbol1.style.top = 'calc(100vh - 140px)';
+  aiSymbol1.style.left = '50px'; // 1 unit to the left
+
+  aiSymbol2.style.top = 'calc(100vh - 140px)';
+  aiSymbol2.style.right = '50px'; // 1 unit to the right
+  aiSymbol2.style.left = 'auto'; // Ensure 'left' property doesn't interfere with 'right'
+  
+  // Ensure initial transform CSS variables are set to their default values
+  aiSymbol1.style.setProperty('--base-translate-y', '0px');
+  aiSymbol1.style.setProperty('--base-scale', '1');
+  aiSymbol2.style.setProperty('--base-translate-y', '0px');
+  aiSymbol2.style.setProperty('--base-scale', '1');
+});
+
+let gravity = true;
+document.getElementById('antigravity-button').addEventListener('click', function() {
+  gravity = !gravity;
+  const aiSymbol1 = document.getElementById('ai-symbol-1');
+  const aiSymbol2 = document.getElementById('ai-symbol-2');
+
+  if (!gravity) {
+    // Anti-gravity: ai-symbol-1 should not be affected
+    // aiSymbol1 remains at its initial bottom-left position and default transform.
+    
+    // aiSymbol2 goes up
+    aiSymbol2.style.top = '20px'; // Move to top
+    aiSymbol2.style.right = '50px'; // Maintain horizontal positions
+    aiSymbol2.style.left = 'auto'; // Ensure right positioning is dominant
+
+    // Update CSS variables for floating effect
+    aiSymbol2.style.setProperty('--base-translate-y', '-15px'); 
+    aiSymbol2.style.setProperty('--base-scale', '1.05');
+
+    aiSymbol2.style.transition = 'top 2s ease-out, transform 0.5s ease'; // Slower transition for floating
+  } else {
+    // Gravity: ai-symbol-1 should not be affected
+    // aiSymbol1 remains at its initial bottom-left position and default transform.
+
+    // aiSymbol2 falls down to initial bottom position
+    aiSymbol2.style.top = 'calc(100vh - 140px)'; // Fall towards bottom
+    aiSymbol2.style.right = '50px'; // Maintain horizontal positions
+    aiSymbol2.style.left = 'auto'; // Ensure right positioning is dominant
+
+    // Reset CSS variables to default values
+    aiSymbol2.style.setProperty('--base-translate-y', '0px');
+    aiSymbol2.style.setProperty('--base-scale', '1');
+
+    aiSymbol2.style.transition = 'top 0.8s ease-in, transform 0.5s ease'; // Faster transition for falling
+  }
+});
+
+document.getElementById('change-heading').addEventListener('click', function() {
+  document.querySelector('h1').textContent = 'Keyboard';
+});
+</script>
+
+</body>
+</html>
